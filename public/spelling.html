@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Standalone Spelling Drill</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center p-4 select-none">
+  <h1 class="text-2xl font-bold mb-4 text-center">Spelling Drill</h1>
+  <a href="vocab_trainer_learning.html" class="text-blue-600 underline">Go to Learning Mode</a>
+  <a href="standalone_vocab_drill.html" class="text-blue-600 underline">Go to Vocabulary Drill</a>
+
+  <div id="loader" class="mb-6">
+    <label class="block text-sm font-medium mb-2">Choose CSV (Word, Sentence)</label>
+    <input type="file" id="fileInput" accept=".csv" class="border p-2 rounded">
+  </div>
+
+  <div id="drillCard" class="hidden bg-white rounded-2xl shadow-xl p-6 w-full max-w-xl">
+    <div class="flex justify-between text-sm mb-2">
+      <div id="progress" class="text-gray-500"></div>
+      <div id="countdown" class="text-red-600 font-bold"></div>
+    </div>
+    <input id="spellingInput" type="text" class="border p-2 rounded w-full mb-2" placeholder="Type the word…">
+    <div class="flex gap-2">
+      <button id="checkBtn" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-xl">Check</button>
+      <button id="repeatBtn" class="px-3 py-2 bg-gray-300 rounded">🔁 Repeat</button>
+    </div>
+    <div id="feedback" class="mt-4 text-lg font-semibold h-6 text-center"></div>
+  </div>
+
+<script>
+function speak(t) {
+  const u = new SpeechSynthesisUtterance(t);
+  u.rate = 0.9;
+  speechSynthesis.speak(u);
+}
+
+let words = [], idx = 0, countdown = null, timeLeft = 45;
+
+const q = id => document.getElementById(id);
+const card = q('drillCard'), input = q('spellingInput'), feedback = q('feedback');
+const progress = q('progress'), countdownEl = q('countdown');
+
+function formatTime(sec) {
+  const m = Math.floor(sec / 60);
+  const s = (sec % 60).toString().padStart(2, '0');
+  return m + ':' + s;
+}
+
+function startTimer(callback) {
+  timeLeft = 45;
+  countdownEl.textContent = formatTime(timeLeft);
+  countdown = setInterval(() => {
+    timeLeft -= 1;
+    countdownEl.textContent = formatTime(timeLeft);
+    if (timeLeft <= 0) {
+      clearInterval(countdown);
+      callback();
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(countdown);
+}
+
+q('fileInput').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  Papa.parse(f, {
+    header: true,
+    skipEmptyLines: true,
+    complete: r => {
+      words = r.data.map(x => ({
+        word: (x.Question || x.Word || '').trim(),
+        sentence: (x.Sentence || '').trim()
+      })).filter(x => x.word);
+      if (words.length === 0) {
+        alert("No words found.");
+        return;
+      }
+      q('loader').classList.add('hidden');
+      card.classList.remove('hidden');
+      idx = 0;
+      showWord();
+    }
+  });
+});
+
+function showWord() {
+  if (idx >= words.length) {
+    card.innerHTML = '<p class="text-2xl font-bold text-center mb-4">🎉 All done!</p>';
+    return;
+  }
+  const current = words[idx];
+  input.value = '';
+  feedback.textContent = '';
+  progress.textContent = (idx + 1) + ' / ' + words.length;
+  speak(current.word);
+  setTimeout(() => speak(current.sentence), 1000);
+  input.focus();
+  stopTimer();
+  startTimer(() => {
+    feedback.textContent = '⏰ Time up! The word was: ' + current.word;
+    feedback.classList.remove('text-green-600');
+    feedback.classList.add('text-red-600');
+    setTimeout(() => { idx++; showWord(); }, 2000);
+  });
+}
+
+function checkAnswer() {
+  const guess = input.value.trim();
+  if (!guess) return;
+  const current = words[idx];
+  if (guess.toLowerCase() === current.word.toLowerCase()) {
+    stopTimer();
+    feedback.textContent = '✔️ Correct!';
+    feedback.classList.remove('text-red-600');
+    feedback.classList.add('text-green-600');
+    idx++;
+    setTimeout(showWord, 1000);
+  } else {
+    feedback.textContent = '❌ Try again';
+    feedback.classList.remove('text-green-600');
+    feedback.classList.add('text-red-600');
+    input.focus();
+  }
+}
+
+q('checkBtn').onclick = checkAnswer;
+q('repeatBtn').onclick = () => speak(words[idx].word);
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter') checkAnswer();
+});
+</script>
+</body>
+</html>

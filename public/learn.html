@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vocabulary Trainer – Learning Mode</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex flex-col items-center min-h-screen p-4 select-none">
+  <h1 class="text-2xl font-bold mb-4 text-center">Vocabulary Trainer</h1>
+  <a href="standalone_spelling_drill.html" class="text-blue-600 underline">Go to Drill Mode</a>
+
+
+  <div id="loader" class="mb-6">
+    <label class="block text-sm font-medium mb-2">Choose CSV (Question / Word, Sentence)</label>
+    <input type="file" id="fileInput" accept=".csv" class="border p-2 rounded">
+  </div>
+
+  <div id="menu" class="hidden flex flex-col gap-4 mb-6">
+    <button id="learnBtn" class="px-4 py-2 bg-emerald-600 text-white rounded-xl">Start Learning Mode</button>
+  </div>
+
+  <div id="learnCard" class="hidden bg-white rounded-2xl shadow-xl p-6 w-full max-w-xl">
+    <div id="learnProgress" class="text-right text-sm text-gray-500 mb-2"></div>
+    <p id="learnWord" class="text-4xl font-bold mb-4 break-words text-center"></p>
+    <p id="learnSentence" class="text-lg italic mb-4 text-center"></p>
+    <input id="learnInput" type="text" class="border p-2 rounded w-full mb-2" placeholder="Type the word…">
+    <button id="learnCheck" class="px-4 py-2 bg-purple-600 text-white rounded-xl w-full">Check</button>
+    <div id="learnFeedback" class="mt-4 text-lg font-semibold h-6 text-center"></div>
+  </div>
+
+<script>
+function speak(t){ const u=new SpeechSynthesisUtterance(t); u.rate=0.9; speechSynthesis.speak(u); }
+let words=[], idx=0;
+
+document.getElementById('fileInput').addEventListener('change',e=>{
+  const f=e.target.files[0]; if(!f) return;
+  Papa.parse(f,{header:true,skipEmptyLines:true,complete:r=>{
+    words = r.data.map(row=>({word:(row.Question||row.Word||'').trim(), sentence:(row.Sentence||'').trim()})).filter(x=>x.word);
+    if(words.length===0){alert('CSV has no words'); return;}
+    document.getElementById('loader').classList.add('hidden');
+    document.getElementById('menu').classList.remove('hidden');
+  }});
+});
+
+const learnBtn=document.getElementById('learnBtn');
+const card=document.getElementById('learnCard');
+const wEl=document.getElementById('learnWord');
+const sEl=document.getElementById('learnSentence');
+const inp=document.getElementById('learnInput');
+const chk=document.getElementById('learnCheck');
+const fb=document.getElementById('learnFeedback');
+const prog=document.getElementById('learnProgress');
+
+learnBtn.onclick=()=>{
+  idx=0;
+  document.getElementById('menu').classList.add('hidden');
+  card.classList.remove('hidden');
+  show();
+};
+function show(){
+  if(idx>=words.length){
+    card.innerHTML='<p class="text-2xl font-bold text-center mb-4">Great job! 🎉</p>';
+    return;
+  }
+  const item=words[idx];
+  wEl.textContent=item.word;
+  sEl.textContent=item.sentence;
+  inp.value='';
+  fb.textContent='';
+  prog.textContent=(idx+1)+' / '+words.length;
+  speak(item.word);
+  if(item.sentence) setTimeout(()=>speak(item.sentence),800);
+  inp.focus();
+}
+chk.onclick=()=>{
+  const guess=inp.value.trim();
+  if(!guess) return;
+  if(guess.toLowerCase()===words[idx].word.toLowerCase()){
+    fb.textContent='✔️ Correct'; fb.classList.remove('text-red-600'); fb.classList.add('text-green-600');
+    idx++; setTimeout(show,800);
+  }else{
+    fb.textContent='❌ Try again'; fb.classList.remove('text-green-600'); fb.classList.add('text-red-600');
+    inp.focus();
+  }
+};
+</script>
+</body>
+</html>

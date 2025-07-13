@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vocabulary Drill – MC Only</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex flex-col items-center min-h-screen p-4 select-none">
+  <h1 class="text-2xl font-bold mb-4 text-center">Vocabulary Drill</h1>
+  <a href="vocab_trainer_learning.html" class="text-blue-600 underline">Go to Learning Mode</a>
+  <a href="standalone_spelling_drill.html" class="text-blue-600 underline">Go to Spelling Drill</a>
+
+  <div id="loader" class="mb-4">
+    <label class="block text-sm font-medium mb-2">
+      Choose CSV file (Question,ChoiceA,ChoiceB,ChoiceC,ChoiceD,Correct)
+    </label>
+    <input type="file" id="fileInput" accept=".csv" class="border p-2 rounded">
+  </div>
+
+  <div id="quizCard" class="hidden bg-white rounded-2xl shadow-xl p-6 w-full max-w-xl">
+    <div class="flex justify-between text-sm mb-2">
+      <div id="progress" class="text-gray-500"></div>
+      <div id="countdown" class="text-red-600 font-bold"></div>
+    </div>
+
+    <p id="questionText" class="text-lg font-medium mb-4 break-words"></p>
+    <form id="choices" class="space-y-2"></form>
+    
+
+    <div id="feedback" class="mt-4 text-lg font-semibold h-6"></div>
+  </div>
+
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Reading Comprehension Quiz</title>
+  <link rel="stylesheet" href="/public/css/styles.css">
+</head>
+<body>
+  <!-- 🎂 Birthday banner -->
+  <div id="birthday-banner">
+    <span>Happy Birthday, <strong>Declan</strong>! 🎈</span>
+  </div>
+  <nav class="site-nav">
+    <ul>
+      <li><a href="/public/spelling.html">Spelling Drill</a></li>
+      <li><a href="/public/vocab.html">Vocab Drill</a></li>
+      <li><a href="/public/learn.html">Learning Mode</a></li>
+    </ul>
+  </nav>
+
+  <h1>Reading Quiz</h1>
+  <div id="passage">Loading passage…</div>
+
+  <div id="questionArea">
+    <p id="questionText"></p>
+    <div id="options"></div>
+    <button id="nextBtn">Next</button>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<script>
+  // one burst in the center
+  window.addEventListener('load', () => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  });
+</script>
+
+</body>
+</html>

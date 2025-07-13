@@ -1,0 +1,53 @@
+[
+    {
+      "text": "Bloodhounds are dogs that have a very good sense of smell. They are used by the police to track down people. Bloodhounds have long ears that hang down. They have wrinkled faces. Most bloodhounds are black and tan.",
+      "questions": [
+        {
+          "question": "Which of the following is an opinion?",
+          "options": [
+            "Bloodhounds have long ears.",
+            "Bloodhounds are used by the police.",
+            "Bloodhounds are good dogs to have around.",
+            "Bloodhounds have a special sense of smell."
+          ],
+          "answer": "Bloodhounds are good dogs to have around."
+        }
+      ]
+    },
+    {
+      "text": "Have you ever wondered how the Great Lakes came to be? The same elements came together to create Lake Superior, Lake Michigan, Lake Huron, Lake Erie, and Lake Ontario.\nThousands of years ago, glaciers—huge masses of slowly moving ice—covered the earth. More and more snow fell. Temperatures grew colder. Glaciers grew larger and larger.\nThe movement of glaciers pulled up huge amounts of soil and rocks. These were shoved ahead and to the sides of the glaciers.\nWarming temperatures caused the glaciers to melt. The glaciers had taken up space. The soil and rocks that were pulled up and shoved along by the glaciers had taken up space. When the glaciers melted, there were huge holes.\nWater from the melting glaciers and from rain filled these huge holes. They were no longer holes. They were lakes!",
+      "questions": [
+        {
+          "question": "What is the best title for this passage?",
+          "options": [
+            "Glaciers and Lakes",
+            "Glaciers Take Up Space",
+            "Melting Glaciers",
+            "How the Great Lakes Came to Be"
+          ],
+          "answer": "How the Great Lakes Came to Be"
+        },
+        {
+          "question": "What caused the glaciers to grow larger?",
+          "options": [
+            "They pulled up huge amounts of soil and rocks.",
+            "More snow fell and temperatures got colder.",
+            "Temperatures grew warmer.",
+            "Melting water fell on them."
+          ],
+          "answer": "More snow fell and temperatures got colder."
+        },
+        {
+          "question": "From where did the water come that filled up the glacier holes?",
+          "options": [
+            "Native Americans filled up the holes to use them as lakes.",
+            "It rained a lot.",
+            "Rivers nearby flowed into the holes.",
+            "It came from the melting glaciers and rain."
+          ],
+          "answer": "It came from the melting glaciers and rain."
+        }
+      ]
+    }
+  ]
+  
